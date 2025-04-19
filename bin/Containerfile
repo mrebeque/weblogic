@@ -1,0 +1,54 @@
+FROM registry-quay-openshift-operators.apps.ocp.sefnet.rj/svcocpsefaz/ubi-rhel9:9.5-1
+
+SHELL ["/bin/bash", "-c"]
+USER root
+
+### Environment variables start
+ENV WORKDIR=/opt/oracle
+ENV JAVA_HOME=$WORKDIR/jdk1.6.0_45
+ENV MW_HOME=$WORKDIR/middleware
+ENV WL_HOME=$MW_HOME/wlserver_10.3 
+ENV DM_HOME=$MW_HOME/user_projects/domains
+ENV DM_NAME=scdi_domain
+ENV PATH=$JAVA_HOME/bin:$PATH
+ENV CMD_WLST="$JAVA_HOME/bin/java $JAVA_OPTIONS -Xmx2048m -XX:MaxPermSize=1024m weblogic.WLST"
+
+### Environment variables start
+WORKDIR $WORKDIR
+RUN mkdir $WORKDIR/install
+
+### Copy stuff
+COPY --chmod=775 ./binarios/weblogic11 $WORKDIR/install 
+COPY --chmod=775 ./binarios/java/jdk-6u45-linux-x64.bin $WORKDIR/install
+COPY --chmod=775 ./install.xml $WORKDIR/install
+
+### Pre-req
+RUN groupadd --gid 1013 oinstall && \
+    useradd  --uid 1010 -m -g oinstall -s /bin/bash oracle -p oracle && \
+    mkdir -p /opt/oracle/middleware/user_projects/domains && \
+    chown -R oracle:oinstall /opt/oracle && \
+    chmod -R 775 /opt/oracle && \
+    echo "alias ll='ls -lah'" >> /home/oracle/.bashrc && \
+    echo "export WORKDIR=/opt/oracle" >> /home/oracle/.bashrc && \
+    echo "export JAVA_HOME=$WORKDIR/jdk1.6.0_45" >> /home/oracle/.bashrc && \
+    echo "export MW_HOME=$WORKDIR/middleware" >> /home/oracle/.bashrc && \
+    echo "export DM_HOME=$MW_HOME/user_projects/domains" >> /home/oracle/.bashrc && \
+    echo "export PATH=$JAVA_HOME/bin:$PATH" >> /home/oracle/.bashrc && \  
+    echo "export CMD_WLST='$JAVA_HOME/bin/java $JAVA_OPTIONS -Xmx2048m -XX:MaxPermSize=1024m weblogic.WLST'"  >> /home/oracle/.bashrc
+
+### Copy stuff
+COPY --chown=oracle:oinstall --chmod=775 ./binarios/java/jdk-6u45-linux-x64.bin $WORKDIR/install
+COPY --chown=oracle:oinstall --chmod=775 ./binarios/weblogic11 $WORKDIR/install 
+COPY --chown=oracle:oinstall --chmod=775 ./install.xml $WORKDIR/install
+COPY --chown=oracle:oinstall --chmod=775 ./start-domain.sh $WORKDIR
+
+## Instalar o JAVA / Weblogic
+RUN $WORKDIR/install/jdk-6u45-linux-x64.bin && \
+    su - oracle -c "java -jar $WORKDIR/install/wls1036_generic.jar -mode=silent -silent_xml=$WORKDIR/install/install.xml" && \
+    rm -rf $WORKDIR/install && \
+    rm -rf /var/lib/apt/lists/* 
+    
+### Expose the Weblogic HTTP port
+EXPOSE 7001 8001
+ENTRYPOINT ["/bin/bash","/opt/oracle/start-domain.sh"]
+

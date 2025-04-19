@@ -1,5 +1,4 @@
 # Ignorar pastas comuns de build e binários
-/bin/
 /build/
 /binarios/
 /dist/
