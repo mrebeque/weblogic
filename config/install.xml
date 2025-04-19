@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bea-installer>
+    <input-fields>
+        <!-- Diretório de instalação -->
+        <data-value name="BEAHOME" value="/opt/oracle/middleware" />
+
+        <!-- Diretório do WebLogic -->
+        <data-value name="WLS_INSTALL_DIR" value="/opt/oracle/middleware/wlserver_10.3" />
+
+        <!-- Escolher componentes a serem instalados -->
+        <!-- data-value name="COMPONENT_PATHS" value="WebLogic Server/Core Application Server,WebLogic Server/Administration Console" / -->
+        <!-- data-value name="COMPONENT_PATHS" value="WebLogic Server"/ -->
+        
+        <!-- Modo de instalação (GUI, Console, Silent, Typical) -->
+        <data-value name="INSTALL_TYPE" value="Typical" />
+
+        <!-- Criar ou não um atalho no menu iniciar (Windows) -->
+        <!-- <data-value name="CREATE_START_MENU_ENTRIES" value="true" /> -->
+        <!-- Configuração de segurança -->
+        <data-value name="SECURITY_UPDATES_ENABLED" value="false" />
+        <data-value name="SECURITY_UPDATES_FROM_MYORACLE" value="false" />
+
+        <!-- Aceitar os termos da licença -->
+        <data-value name="DECLINE_AUTO_UPDATES" value="true" />
+        <data-value name="BEAHOME_DIR_IS_VALID" value="true" />
+        <data-value name="WLS_INSTALL_DIR_IS_VALID" value="true" />
+        <data-value name="USER_TYPE" value="single" />
+    </input-fields>
+</bea-installer>

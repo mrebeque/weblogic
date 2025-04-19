@@ -1,0 +1,57 @@
+# Ignorar pastas comuns de build e binários
+/bin/
+/build/
+/binarios/
+/dist/
+/out/
+*.exe
+*.dll
+*.so
+*.dylib
+*.class
+*.o
+*.obj
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar arquivos temporários de sistema
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*.swp
+*.swo
+*.tmp
+*.log
+
+# Ignorar arquivos de IDEs
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Ignorar dependências de projetos
+node_modules/
+vendor/
+env/
+venv/
+.env
+.env.local
+
+# Ignorar arquivos de controle do Git
+*.orig
+
+# Arquivos de lock e cache
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.cache/
+.nyc_output/
+
+# Outros arquivos que podem ser criados localmente
+coverage/
+*.tgz
+*.zip
+*.tar.gz
+
